@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>SMARTCHECKIN | EIT</title>
+<!--     <link rel="stylesheet" href="css/style.css" media="all"> -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
+<!--    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script> -->
+
+    
+<!--     <script src="https://code.jquery.com/jquery-latest.min.js"></script> -->
+<!--     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous"> -->
+<!-- <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script> -->
+    <style type="text/css">
+    html { height: 100% }
+  
+    /* css กำหนดความกว้าง ความสูงของแผนที่ */
+    #map_canvas { 
+        width:100%;
+        height:200px;
+       
+    /*  margin-top:100px;*/
+    }
+    </style>
+      <style>
+          #pictureUrl { display: block; margin: 0 auto }
+        </style>
+  </head>
+  <body>
+
+    
+<script>
+
+</script>
+    
+      <script src="https://static.line-scdn.net/liff/edge/2.1/sdk.js"></script>
+      <script>
+        function runApp() {
+          liff.getProfile().then(profile => {
+            document.getElementById("pictureUrl").src = profile.pictureUrl;
+            document.getElementById("userId").innerHTML = '<b>UserId:</b> ' + profile.userId;
+            document.getElementById("userId2").innerHTML = profile.userId;
+            document.getElementById("displayName").innerHTML =  profile.displayName;
+           
+          }).catch(err => console.error(err));
+        }
+        liff.init({ liffId: "1657723640-ybjrDlKD" }, () => {
+          if (liff.isLoggedIn()) {
+            runApp()
+          } else {
+            liff.login();
+          }
+        }).then(() => {
+            // start to use LIFF's api
+            initializeApp();
+        })
+        .catch((err) => {
+            // document.getElementById("liffAppContent").classList.add('hidden');
+            // document.getElementById("liffInitErrorMessage").classList.remove('hidden');
+        });
+       
+      </script>      
+<div id="test1" style="display:show" > </div>
+
+          <div class="container">
+
+        <form>
+            <div align="center">
+      <img style="display: none;" id="pictureUrl" style="width:80px; border-radius:60px;">
+      <p style="display: none;" id="userId"></p>
+      <p style="display: none;" id="userId2"></p>
+      <p id="displayName" style="font-size: 15px;" ></p>
+    </div>
+            <div class="card-header" style="padding-bottom: 0%;color: #fff;background-color: #007bff;border-color: #007bff;font-weight: 400">
+                <label class="card-title">บันทึกชีวิตประจำวัน</label>
+            </div>          
+           <div style="display: none;" align="center" id="map_canvas"></div>      
+       <div id="showDD" >
+       <input style="display: none;" name="lat_value" id="lat_value" value="">
+       <input style="display: none;" name="lon_value" id="lon_value" value="">
+       <input style="display: none;" name="userId2" id="userId2" value="">        
+            <label for="exampleInputEmail1" style="padding-top: 2%;">วันที่ทำกิจกรรม</label>
+            <input type="date" class="form-control" data-date-language="th" id="dateTimes" name="dateTimes"> 
+<!--          <button type="button" class="btn btn-primary" id="allday" name="allday">All Day</button> -->
+         <label style="padding-top: 2%;">กิจกรรม</label>
+            <select name="cars" class="custom-select mb-3" style="margin-bottom: 0rem!important;" id="activity" name="activity" onchange="myFunction()">
+                  <option value="1">อยู่บ้าน</option>
+                <option value="2">ทำงานที่บริษัท</option>
+      <option selected value="10">ทำงานที่บ้าน</option>  
+       <option value="11">ทำงานที่อื่นๆ</option> 
+                <option value="3">ซื้ออาหาร</option>
+       <option value="9">ซื้อของ</option>
+                <option value="4">ไปสถานพยาบาล</option>
+                <option value="5">นั่งร้านอาหาร</option> 
+    <option value="6">ส่งของ</option>
+                <option value="7">ติดต่อราชการ</option>     
+      
+      <option value="8">อื่นๆ</option> 
+              </select>
+                <label style="padding-top: 2%;">เริ่ม(เวลา):</label>
+                <input class="form-control" type="time" id="startdatetime" name="startdatetime" value="" >
+                 <label style="padding-top: 2%;">สิ้นสุด(เวลา):</label>
+                <input class="form-control" type="time" id="finishdatetime" name="finishdatetime" value="" >
+         
+          <label style="padding-top: 2%;">พาหนะ</label>
+            <select name="cars" class="custom-select mb-3" style="margin-bottom: 0rem!important;" id="vehicle" name="vehicle">
+              
+                <option  value="8">ไม่ใช้รถ</option>
+  <option value="6">รถยนต์ส่วนตัว</option>
+  <option value="7">มอเตอร์ไซค์ส่วนตัว</option>         
+                <option value="1">รถสาธารณะ</option>
+                <option value="2">MRT</option>
+                <option value="3">BTS</option>
+                <option value="4">วินมอเตอร์ไซค์</option>
+                <option value="5">แท็กซี่</option>
+              
+<!--                 <option value="7">มอเตอร์ไซค์ส่วนตัว</option>               -->
+              </select>
+            <label style="padding-top: 2%;">รายละเอียด (ไปไหน กับใคร พบปะใคร)</label>
+        <button type="button" class="btn btn-primary" id="famity" name="famity" onclick="myfamity()" value="ครอบครัว" >ครอบครัว</button>
+<!--          <button type="button" class="btn btn-primary" id="wfh" name="wfh" onclick="mywfh()" value="WFH" >WFH</button> -->
+    <div style="padding-top: 2%;">
+            <textarea type="" class="form-control" id="meeting" name="meeting" rows="3"></textarea>
+    </div>   
+             <p id="pointstime" name="pointstime"></p>       
+         <div>
+        </form>  
+          </div>
+          <center>
+                    <div style="padding-top: 2%;">
+                        <button type="button" class="btn btn-primary" id="btnRefresh" name="btnRefresh" >บันทึก</button>
+                        <button type="button" class="btn btn-primary" id="btnCloseWindow" name="btnCloseWindow" >บันทึก และปิด</button>
+                    </div>
+                </center>
+      <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>    
+      <script type="text/javascript">
+      var map; // กำหนดตัวแปร map ไว้ด้านนอกฟังก์ชัน เพื่อให้สามารถเรียกใช้งาน จากส่วนอื่นได้
+      var GGM; // กำหนดตัวแปร GGM ไว้เก็บ google.maps Object จะได้เรียกใช้งานได้ง่ายขึ้น
+      
+      function initialize() { // ฟังก์ชันแสดงแผนที่
+          GGM=new Object(google.maps); // เก็บตัวแปร google.maps Object ไว้ในตัวแปร GGM
+          // กำหนดจุดเริ่มต้นของแผนที่
+          var my_Latlng  = new GGM.LatLng(13.761728449950002,100.6527900695800);
+          var my_mapTypeId=GGM.MapTypeId.ROADMAP; // กำหนดรูปแบบแผนที่ที่แสดง
+          // กำหนด DOM object ที่จะเอาแผนที่ไปแสดง ที่นี้คือ div id=map_canvas
+          var my_DivObj=$("#map_canvas")[0]; 
+          // กำหนด Option ของแผนที่
+          var myOptions = {
+              zoom: 13, // กำหนดขนาดการ zoom
+              center: my_Latlng , // กำหนดจุดกึ่งกลาง
+              mapTypeId:my_mapTypeId // กำหนดรูปแบบแผนที่
+          };
+          map = new GGM.Map(my_DivObj,myOptions);// สร้างแผนที่และเก็บตัวแปรไว้ในชื่อ map
+       
+       
+       
+          // เรียกใช้คุณสมบัติ ระบุตำแหน่ง ของ html 5 ถ้ามี
+          if(navigator.geolocation){
+                  navigator.geolocation.getCurrentPosition(function(position){
+                      var pos = new GGM.LatLng(position.coords.latitude,position.coords.longitude);
+                      var infowindow = new GGM.InfoWindow({
+                          map: map,
+                          position: pos,
+                          content: 'คุณอยู่ที่นี่.'
+                      });
+                       
+                      var my_Point = infowindow.getPosition();  // หาตำแหน่งของตัว marker เมื่อกดลากแล้วปล่อย
+                      map.panTo(my_Point);  // ให้แผนที่แสดงไปที่ตัว marker       
+                      $("#lat_value").val(my_Point.lat());  // เอาค่า latitude ตัว marker แสดงใน textbox id=lat_value
+                      $("#lon_value").val(my_Point.lng()); // เอาค่า longitude ตัว marker แสดงใน textbox id=lon_value 
+                      $("#zoom_value").val(map.getZoom()); // เอาขนาด zoom ของแผนที่แสดงใน textbox id=zoom_value              
+                      map.setCenter(pos);
+                  },function() {
+                      // คำสั่งทำงาน ถ้า ระบบระบุตำแหน่ง geolocation ผิดพลาด หรือไม่ทำงาน
+                  });
+          }else{
+               // คำสั่งทำงาน ถ้า บราวเซอร์ ไม่สนับสนุน ระบุตำแหน่ง
+          }
+         
+          // กำหนด event ให้กับตัวแผนที่ เมื่อมีการเปลี่ยนแปลงการ zoom
+          GGM.event.addListener(map, 'zoom_changed', function() {
+              $("#zoom_value").val(map.getZoom()); // เอาขนาด zoom ของแผนที่แสดงใน textbox id=zoom_value  
+          });
+       
+      }
+      $(function(){
+          // โหลด สคริป google map api เมื่อเว็บโหลดเรียบร้อยแล้ว
+          // ค่าตัวแปร ที่ส่งไปในไฟล์ google map api
+          // v=3.2&s
